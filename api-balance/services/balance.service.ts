@@ -5,10 +5,15 @@ export default class BalanceService {
 
   async getBalance(crypto: String): Promise<Object> {
 
-    let url: string = `${this.apiUrl}/assets/${crypto}/metrics`;
-    const response = await axios.get(url);
+    let urlBTC: string = `${this.apiUrl}/assets/BTC/metrics`;
+    let urlETH: string = `${this.apiUrl}/assets/ETH/metrics`;
+    let urlADA: string = `${this.apiUrl}/assets/ADA/metrics`;
 
-    return response.data;
+    const responseBTC = await axios.get(urlBTC);
+    const responseETH = await axios.get(urlETH);
+    const responseADA = await axios.get(urlADA);
+
+    return [responseBTC.data,responseETH.data,responseADA.data];
   }
 
 }
