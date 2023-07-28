@@ -19,13 +19,3 @@ Para correr el proyecto, debes ejecutar el siguiente comando desde la carpeta de
 ``` npm start ```
 
 Esto iniciará la aplicación en [http://localhost:3001](http://localhost:3001). Si todo está correctamente configurado, podrás visualizar la página en tu navegador.
-
-## Ejemplos
-
-A continuación, se muestran algunas imágenes de ejemplo de la aplicación.
-
-![Ejemplo 7:](./img/7.png)
-<br><br>
-![Ejemplo 8:](./img/8.png)
-<br><br>
-![Ejemplo 9:](./img/9.png)
