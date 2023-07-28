@@ -6,7 +6,6 @@ export class BalanceController {
 
   async getBalance(req: Request, res: Response): Promise<void | Response<any, Record<string, any>>> {
     try {
-      const { crypto } = req.query;
 
       const { error, value } = querySchema.validate(req.query, { abortEarly: false });
 
@@ -15,7 +14,7 @@ export class BalanceController {
         return res.status(400).json({ message: errorDetails });
       }
 
-      const balanceList = await new BalanceService().getBalance(String(crypto));
+      const balanceList = await new BalanceService().getBalance();
       return res.status(200).json(balanceList);
 
     } catch (error: any) {

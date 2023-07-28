@@ -1,19 +1,18 @@
 import './index.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import React from 'react';
-import ReactDOM from 'react-dom/client';
+import ReactDOM from 'react-dom';
 import CryptoTable from './components/CryptoTable';
 import reportWebVitals from './reportWebVitals';
 import Container from 'react-bootstrap/Container';
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
-
-root.render(
+ReactDOM.render(
   <React.StrictMode>
     <Container fluid="md">
-      <CryptoTable/>
+      <CryptoTable />
     </Container>
-  </React.StrictMode>
+  </React.StrictMode>,
+  document.getElementById('root')
 );
 
 reportWebVitals();

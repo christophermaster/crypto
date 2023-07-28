@@ -94,7 +94,7 @@ const Calculator = (props) => {
 
       <Row >
         {currencies.map((currency, idx) => (
-          <Col key={idx} style={{ width: '17rem' }} md={4}>
+          <Col key={idx}  md={4}>
             <Cards
               name={currency.name}
               price={currency.price}
