@@ -9,15 +9,23 @@ import btcImage from '../img/btc.png';
 import adaImage from '../img/ada.png';
 import ethImage from '../img/eth.png';
 import { Card } from 'react-bootstrap';
+import { formatNumberToShort } from '../utils/utilities';
+import Calculator from './Calculator';
 
 const CryptoTable = () => {
   const [coinData, setCoinData] = useState([]);
+  const [usdCrypto, setUsdCrypto] = useState([]);
 
   useEffect(() => {
     const fetchCoinData = async () => {
       try {
         const data = await getCryptoData();
+        let usd = [];
         setCoinData(data);
+        data.map((coin, index) => {
+          usd.push(coin.data.market_data.price_usd);
+        })
+        setUsdCrypto(usd);
       } catch (error) {
         console.error(error.message);
       }
@@ -54,25 +62,20 @@ const CryptoTable = () => {
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = 'data.json';
+    a.download = 'crypto_data.json';
     a.click();
     URL.revokeObjectURL(url);
   };
 
-  const formatNumberToShort = (value) => {
-    const suffixes = ['', 'K', 'M', 'B', 'T'];
-    const suffixNum = Math.floor(Math.log10(value) / 3);
-    let shortValue = (value / Math.pow(10, suffixNum * 3)).toFixed(1);
-    return shortValue + suffixes[suffixNum];
-  }
-
-
   return (
-    <div className='mt-4'>   
-      <Card bg="dark" text="white">
+    <div>
+      {usdCrypto.length > 0 && <Calculator usdCrypto={usdCrypto} />}
+
+      <Card bg="dark" text="white" className='mt-4'>
         <Card.Body> <label className='table-tile '>Cryptos</label>
         </Card.Body>
       </Card>
+
       <div className="mb-2 btn-group-div">
         <Button variant="outline-light" onClick={exportToJson} className="btn-download" size="sm"><BiCloudDownload /> JSON</Button>
         <Button variant="outline-light" onClick={exportToCSV} className="btn-download" size="sm"><BiCloudDownload /> CSV</Button>
@@ -101,15 +104,15 @@ const CryptoTable = () => {
               <th>{index + 1}</th>
               <td className="wider-cell">
                 {(() => {
-                  if (coin.data.symbol == "BTC") {
+                  if (coin.data.symbol === "BTC") {
                     return <img src={btcImage} alt="BTC" className="img-fluid" style={{ maxWidth: '15px' }} />
-                  } else if (coin.data.symbol == "ADA") {
+                  } else if (coin.data.symbol === "ADA") {
                     return <img src={adaImage} alt="ADA" className="img-fluid" style={{ maxWidth: '15px' }} />
                   } else {
                     return <img src={ethImage} alt="ETH" className="img-fluid" style={{ maxWidth: '15px' }} />
                   }
                 })()}
-                <b class="crypto"> {coin.data.name}</b> . {coin.data.symbol}
+                <b className="crypto"> {coin.data.name}</b> . {coin.data.symbol}
               </td>
               <td> ${coin.data.market_data.price_usd.toFixed(2)}</td>
               <td style={{ color: coin.data.market_data.percent_change_usd_last_1_hour < 0 ? '#F33F54' : '#00CC3D' }}>{coin.data.market_data.percent_change_usd_last_1_hour.toFixed(2)}%</td>

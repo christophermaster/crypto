@@ -1,41 +1,35 @@
-import React, { useState } from 'react';
-import btcImage from '../img/btc.png';
-import adaImage from '../img/ada.png';
-import ethImage from '../img/eth.png';
+import React from 'react';
 import { Card } from 'react-bootstrap';
-import Col from 'react-bootstrap/Col';
-import Row from 'react-bootstrap/Row';
 
-const Cards = (props) => {
+const Cards = ({ name, price, monthlyReturn, initialInvestment, url }) => {
 
-    const resul = props.result;
+    const calculateBalance = () => {
+        const monthlyMultiplier = 1 + monthlyReturn;
+        const annualMultiplier = monthlyMultiplier ** 12;
+        const balance = initialInvestment * annualMultiplier;
+        return balance;
+    };
 
-    const cards = [{
-        name: "BTC",
-        url: btcImage
-    }, {
-        name: "ETH",
-        url: ethImage
-    }, {
-        name: "ADA",
-        url: adaImage
-    }];
+    const balance = calculateBalance();
+
 
     return (
         <div>
-            <Row xs={1} md={3} className="g-40">
-                {cards.map((card, idx) => (
-                    <Col key={idx} style={{ width: '12rem' }}>
-                        <Card bg="dark" text="white">
-                            <Card.Img src={card.url} />
-                            <Card.Body>
-                                <Card.Title className="cryptocurrency-name">{card.name}</Card.Title>
-                                <Card.Text className="amount-usd"><h3>{resul[idx] ? resul[idx] : 0} USD</h3></Card.Text>
-                            </Card.Body>
-                        </Card>
-                    </Col>
-                ))}
-            </Row>
+
+            <Card bg="dark" text="white">
+                <Card.Header >{name}</Card.Header>
+                <Card.Img src={url} />
+                <Card.Body>
+                    <Card.Text className="amount-usd"><b className='crypto'>Valor actual:</b> ${price.toFixed(2)} </Card.Text>
+                </Card.Body>
+                <Card.Header >Balance proyectado</Card.Header>
+
+                <Card.Body>
+                    <Card.Text className="amount-usd"><b className='crypto'> USD:</b> ${balance.toFixed(2)} </Card.Text>
+                    <Card.Text className="amount-usd"><b className='crypto'>Crypto:</b> {(balance / price).toFixed(8) } </Card.Text>
+                </Card.Body>
+            </Card>
+
         </div>
 
     );

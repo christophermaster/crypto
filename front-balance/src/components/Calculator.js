@@ -1,29 +1,58 @@
 import React, { useState } from 'react';
-import { FaBitcoin, FaEthereum, FaCcVisa } from 'react-icons/fa';
 import { Card } from 'react-bootstrap';
 import Cards from './Cards';
-import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
+import btcImage from '../img/btc.png';
+import adaImage from '../img/ada.png';
+import ethImage from '../img/eth.png';
 
-const Calculator = () => {
+const Calculator = (props) => {
+  const [initialInvestment, setInitialInvestment] = useState(0);
   const [bitcoinAmount, setBitcoinAmount] = useState(0);
   const [etherAmount, setEtherAmount] = useState(0);
   const [cardanoAmount, setCardanoAmount] = useState(0);
-  const [result, setResult] = useState([]);
 
-  const calculateInvestment = () => {
-    const bitcoinReturn = bitcoinAmount * 1.05; // 5% monthly return
-    const etherReturn = etherAmount * 1.042; // 4.2% monthly return
-    const cardanoReturn = cardanoAmount * 1.01; // 1% monthly return
-    const totalReturn = bitcoinReturn + etherReturn + cardanoReturn;
+  const usdCrypto = props.usdCrypto;
 
-    setResult([bitcoinReturn.toFixed(2), etherReturn.toFixed(2), cardanoReturn.toFixed(2), totalReturn.toFixed(2)]);
+  const currencies = [
+    {
+      name: "BTC",
+      url: btcImage,
+      price: usdCrypto[0],
+      monthlyReturn: 0.05,
+      inversion: bitcoinAmount > 0 ? bitcoinAmount : initialInvestment
+    },
+    {
+      name: "ETH",
+      url: ethImage,
+      price: usdCrypto[1],
+      monthlyReturn: 0.042,
+      inversion: etherAmount > 0 ? etherAmount : initialInvestment
+
+    },
+    {
+      name: "ADA",
+      url: adaImage,
+      price: usdCrypto[2],
+      monthlyReturn: 0.01,
+      inversion: cardanoAmount > 0 ? cardanoAmount : initialInvestment
+
+    },
+  ];
+
+  const handleInputChange = (e) => {
+    setInitialInvestment(parseFloat(e.target.value || 0));
   };
-
-  const handleCalculate = () => {
-    calculateInvestment();
+  const handleInputChangeBTC = (e) => {
+    setBitcoinAmount(parseFloat(e.target.value || 0));
+  };
+  const handleInputChangeETH = (e) => {
+    setEtherAmount(parseFloat(e.target.value || 0));
+  };
+  const handleInputChangeADA = (e) => {
+    setCardanoAmount(parseFloat(e.target.value || 0));
   };
 
   return (
@@ -31,62 +60,51 @@ const Calculator = () => {
 
       <Card bg="dark" text="white" className='mb-4'>
         <Card.Body>
-          <label className='title-calculator'>Calculator</label>
+          <label className='title-calculator'>Calculadora de Inversión en Criptomonedas</label>
         </Card.Body>
       </Card>
 
       <Card className='card-calculator mb-4' text="white">
         <Card.Body>
           <Form>
+            <Form.Label>Ingrese el monto de inversión inicial en USD:</Form.Label>
+
             <Row className="mb-3">
               <Form.Group as={Col} controlId="formGridCity">
-                <Form.Label>City</Form.Label>
-                <Form.Control />
+                <Form.Label>BTC:</Form.Label>
+                <Form.Control value={bitcoinAmount} onChange={handleInputChangeBTC} />
               </Form.Group>
-
-              <Form.Group as={Col} controlId="formGridState">
-                <Form.Label>State</Form.Label>
-                <Form.Select defaultValue="Choose...">
-                  <option>Choose...</option>
-                  <option>...</option>
-                </Form.Select>
+              <Form.Group as={Col} controlId="formGridCity">
+                <Form.Label>ETH</Form.Label>
+                <Form.Control value={etherAmount} onChange={handleInputChangeETH} />
               </Form.Group>
-
-              <Form.Group as={Col} controlId="formGridZip">
-                <Form.Label>Zip</Form.Label>
-                <Form.Control />
+              <Form.Group as={Col} controlId="formGridCity">
+                <Form.Label>ADA</Form.Label>
+                <Form.Control value={cardanoAmount} onChange={handleInputChangeADA} />
+              </Form.Group>
+              <Form.Group as={Col} controlId="formGridCity">
+                <Form.Label>Inversión general:</Form.Label>
+                <Form.Control value={initialInvestment} onChange={handleInputChange} />
               </Form.Group>
             </Row>
+
           </Form>
-          <label className='title-calculator'>Calculator</label>
-          <div>
-            <label>
-              Bitcoin (BTC):
-              <input type="number" value={bitcoinAmount} onChange={(e) => setBitcoinAmount(parseFloat(e.target.value))} />
-            </label>
-            <FaBitcoin />
-          </div>
-          <div>
-            <label>
-              Ethereum (ETH):
-              <input type="number" value={etherAmount} onChange={(e) => setEtherAmount(parseFloat(e.target.value))} />
-            </label>
-            <FaEthereum />
-          </div>
-          <div>
-            <label>
-              Cardano (ADA):
-              <input type="number" value={cardanoAmount} onChange={(e) => setCardanoAmount(parseFloat(e.target.value))} />
-            </label>
-            <FaCcVisa />
-          </div>
-          <Button onClick={handleCalculate} className='mb-4 float-end' >Calculate</Button>
         </Card.Body>
       </Card>
 
-
-
-      <Cards result={result} />
+      <Row >
+        {currencies.map((currency, idx) => (
+          <Col key={idx} style={{ width: '17rem' }} md={4}>
+            <Cards
+              name={currency.name}
+              price={currency.price}
+              monthlyReturn={currency.monthlyReturn}
+              initialInvestment={currency.inversion}
+              url={currency.url}
+            />
+          </Col>
+        ))}
+      </Row>
     </div>
 
   );
