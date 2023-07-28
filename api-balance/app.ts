@@ -7,14 +7,16 @@ import BalanceService from './services/balance.service';
 const cors = require('cors');
 const app = express();
 const server = http.createServer(app);
+
 const io = require('socket.io')(server, {
   cors: {
-    origin: '*', // Cambia esto a la URL de tu cliente de ReactJS
+    origin: '*', 
     methods: ['GET', 'POST'],
     allowedHeaders: ['my-custom-header'],
     credentials: true,
   },
 });
+
 const port = 3000;
 
 app.use(express.json());
@@ -28,7 +30,7 @@ io.on('connection', (socket:socketIo.Socket) => {
   console.log('Cliente conectado');
   // Emitir los datos al cliente cada 8 segundos
   setInterval(async () => {
-    const data = await new BalanceService().getBalance(); // Usar la función del controlador para obtener los datos
+    const data = await new BalanceService().getBalance(); 
     socket.emit('message', data);
   }, 8000);
 });

@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { getCryptoData } from '../services/api';
 import { saveAs } from 'file-saver';
 import { BiCloudDownload } from "react-icons/bi";
 import { Card } from 'react-bootstrap';
